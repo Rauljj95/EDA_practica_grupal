@@ -114,6 +114,7 @@ void BuscarIncidencia (unsigned Incidencia, tIncidencia *pIncidencias, unsigned 
 int Partir (tIncidencia v[], int primero, int ultimo, tBoolean PorNumero)
 {
    /* A RELLENAR POR EL ALUMNO */ 
+  return 0;
 }
 
 
@@ -261,7 +262,7 @@ int main ()
         case 7: 
           break;
 
-        default: printf("Ha tecleado una opción incorrecta\n");
+        default: printf("Ha tecleado una opcion incorrecta\n");
 
     }
    } while (Opcion!= 7);
