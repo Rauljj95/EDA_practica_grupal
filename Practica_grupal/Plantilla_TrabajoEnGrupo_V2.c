@@ -1,5 +1,19 @@
+/*
+ --------- TRABAJO GRUPAL. ESTRUCTURAS DE DATOS Y ALGORITMOS.----------- 
+           Archivo: TrabajoGrupal.c 
+           Autores: Raúl Jiménez Juárez. Beatriz Magán Pinto.
+           Descripcion: POR COMPLETAR SEGUN PLANTILLA !!!!!!!!!!!!!!
+
+           Version: 0.1
+           Fecha de última modificacion: 3 de Mayo de 2017
+ -----------------------------------------------------------------------
+*/
+    
+
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> //Libreria añadida por nosotros 
 
 #define ESTADO_CREADA 0
 #define ESTADO_RESOLVIENDOSE 1
@@ -23,6 +37,7 @@ char Fecha[11];
 char Descripcion [500];
 unsigned Estado;
 }tIncidencia;
+
 
 /**
 NOMBRE: Partir.
@@ -111,6 +126,31 @@ EECTOS COLATERALES: No tiene.
 
 void BuscarIncidencia (unsigned Incidencia, tIncidencia *pIncidencias, unsigned Cantidad);
 
+
+//Funciones generadas por nosotros:
+
+/**
+NOMBRE: MostrarIncidencia
+DESCRIPCIÓN: Muestra por consola la incidencia requerida por el usuario.
+PARAMETROS DE ENTRADA/SALIDA:
+Incidencia: incidencia que queremos mostrar
+RETORNO DE LA FUNCIÓN: No tiene. Es void.
+EECTOS COLATERALES: No tiene. 
+*/
+void MostrarIncidencia (tIncidencia *incidencia);
+
+/**
+NOMBRE: PedirDatos
+DESCRIPCIÓN: Funcion que pide al usuario los datos de la incidencia para su posterior registro. 
+PARAMETROS DE ENTRADA/SALIDA:
+Incidencia: incidencia a pedir sus datos.
+RETORNO DE LA FUNCIÓN: No tiene. Es void.
+EECTOS COLATERALES: No tiene. 
+*/
+void PedirDatos (tIncidencia *incidencia);
+
+
+
 int Partir (tIncidencia v[], int primero, int ultimo, tBoolean PorNumero)
 {
    /* A RELLENAR POR EL ALUMNO */ 
@@ -143,6 +183,8 @@ int Menu (void)
 	printf ( "\n Elija opcion ");
         scanf("%d", &opcion);
 
+        while(getchar()!='\n'); //Control de error: si el usuario no introduce un digito, recogemos el caracter introducido hasta "\n".
+
     return opcion;
 } /*fin menu*/
 
@@ -170,6 +212,153 @@ void OrdenarIncidencias (tIncidencia *p, unsigned N)
 void ModificarIncidencia (unsigned Incidencia, tIncidencia *p, unsigned Cantidad)
 {
   /* A RELLENAR POR EL ALUMNO */
+}
+
+void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
+{
+  unsigned NumIncidencia;
+unsigned Prioridad;
+char Asunto[150];
+char Sistema[9];
+char Subsistema[9];
+char Fecha[11];
+char Descripcion [500];
+unsigned Estado;
+
+  int i=0; //Variable de posicion
+  int j=0; //Variable de posicion
+    if(incidencia==NULL)
+    {
+      printf("No existe tal incidencia\n");
+      return;
+    }
+
+    printf("La incidencia requerida es:\n");
+    printf("Numero de incidencia: %d\n", &incidencia.NumIncidencia);
+    printf("Prioridad: %d\n", &incidencia.Prioridad );
+    
+    for(i=0; i<150; i++)
+    {
+      printf("Asunto: %s\n", incidencia->Asunto[i]);
+      return 0;
+    }
+
+    for(i=0; i<9; i++)
+    {
+      printf("Sistema: %s\n", incidencia->Sistema[i]);
+      for (j=0; j<9; j++)
+      {
+        printf("Subsistema: %s\n", incidencia->Subsistema[i]);
+      }
+    }
+
+    for(i=0; i<11; i++)
+    {
+      printf("Fecha: %s\n", incidencia->Fecha[i]);
+    }
+
+    for (i=0; i<500 ; i++)
+    {
+      printf("Descripcion:%s\n", incidencia->Descripcion);
+    }
+
+    printf("Estado: %d\n", &incidencia.Estado);
+
+}
+
+
+void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ 
+{
+
+  char variableAuxiliar[1500];
+
+  printf("Buenos dias, usuario\n");
+
+  printf("Introduce numero de la incidencia a guardar\n");
+  fflush(stdin);
+  scanf("%d", &incidencia->NumIncidencia);
+
+do{
+  printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
+  fflush(stdin);
+  scanf("%d", &incidencia->Prioridad);
+  if(strlen(variableAuxiliar)>4)
+  {
+    printf("Se ha excedido la longitud del array\n");
+  }
+}
+while(strlen(variableAuxiliar)>4);
+  
+    do{
+           printf("Introduce el asunto\n");
+           fflush(stdin);
+           gets(variableAuxiliar);
+          
+          if(strlen(variableAuxiliar)>150)
+          {
+              printf("Se ha excedido la longitud del array\n");
+          }
+    }
+    while(strlen(variableAuxiliar)>150);
+
+
+    do{
+           printf("Introduce el sistema\n");
+           fflush(stdin);
+           gets(incidencia->Sistema);
+
+           if(strlen(variableAuxiliar)>9)
+           {
+              printf("Se ha excedido la longitud del array\n");
+           }
+      }
+    while(strlen(variableAuxiliar)>9);
+
+    do{
+        printf("Introduce el Subsistema\n");
+        fflush(stdin);
+        gets(incidencia->Subsistema);
+
+        if(strlen(variableAuxiliar)>9)
+        {
+          printf("Se ha excedido la longitud del array\n");
+        }
+      }
+    while(strlen(variableAuxiliar)>9);
+    
+  
+    do{
+      printf("Introduce la fecha\n");
+      fflush(stdin);
+      gets(incidencia->Fecha);
+
+      if(strlen(variableAuxiliar)>11)
+      {
+        printf("Se ha excedido la longitud del array\n");
+      }
+    }
+    while(strlen(variableAuxiliar)>11);
+    
+  
+
+    do{
+
+      printf("Introduce la Descripcion\n");
+      fflush(stdin);
+      gets(incidencia->Descripcion);
+
+      if(strlen(variableAuxiliar)>500)
+      {
+        printf("Se ha excedido la longitud del array\n");
+      }
+    }
+    while(strlen(variableAuxiliar)>500);
+
+  printf("Introduce el estado\n");
+  fflush(stdin);
+  scanf("%d", &incidencia->Estado);
+
+  
 }
 
 
