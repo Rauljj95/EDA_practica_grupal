@@ -38,6 +38,32 @@ char Descripcion [500];
 unsigned Estado;
 }tIncidencia;
 
+typedef struct
+{
+	tNodo *anterior;
+	tNodo *siguiente;
+	tIncidencia *incidencia;
+}tNodo;
+
+
+/**
+NOMBRE: CrearNodo
+DESCRIPCION: Crea un nuevo nodo para la lista.
+PARAMETROS DE ENTRADA: ninguno
+PARAMETROS DE SALIDA:
+tNodo *: puntero al nevo nodo creado.
+*/
+tNodo *CrearNodo();
+
+/**
+NOMBRE: EliminarIncidencias
+DESCRIPCION: Libera la lista con incidencias.
+PARAMETROS DE ENTRADA: tNodo*: Lista a eliminar
+PARAMETROS DE SALIDA: ninguno
+
+*/
+void EliminarLista(tNodo *incidencias);
+
 
 /**
 NOMBRE: Partir.
@@ -50,7 +76,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: nueva posición del pivote.
 EECTOS COLATERALES: No tiene. 
 */
-int Partir (tIncidencia v[], int primero, int ultimo, tBoolean PorNumero);
+int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero);
 
 /**
 NOMBRE: QuickSort.
@@ -63,7 +89,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void QuickSort (tIncidencia v[], int izda, int dcha, tBoolean PorNumero);
+void QuickSort (tNodo *Incidencias, int izda, int dcha, tBoolean PorNumero);
 
 /**
 NOMBRE: GuardarIncidencias
@@ -75,7 +101,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void GuardarIncidencias (tIncidencia *p, unsigned N);
+void GuardarIncidencias (tNodo *incidencias, unsigned N);
 
 /**
 NOMBRE: LeerIncidencias
@@ -86,7 +112,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void LeerIncidencias (tIncidencia *p, unsigned N);
+void LeerIncidencias (tNodo *incidencias, unsigned N);
 
 /**
 NOMBRE: OrdenarIncidencias
@@ -99,7 +125,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void OrdenarIncidencias (tIncidencia *p, unsigned N);
+void OrdenarIncidencias (tNodo *incidencias, unsigned N);
 
 /**
 NOMBRE: ModificarIncidencia
@@ -123,8 +149,8 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-
-void BuscarIncidencia (unsigned Incidencia, tIncidencia *pIncidencias, unsigned Cantidad);
+//LO HARA POR BUSQUEDA BINARIA
+void BuscarIncidencia (unsigned Incidencia, tNodo *incidencias, unsigned Cantidad);
 
 
 //Funciones generadas por nosotros:
@@ -151,20 +177,20 @@ void PedirDatos (tIncidencia *incidencia);
 
 
 
-int Partir (tIncidencia v[], int primero, int ultimo, tBoolean PorNumero)
+int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero)
 {
    /* A RELLENAR POR EL ALUMNO */ 
   return 0;
 }
 
 
-void QuickSort (tIncidencia v[], int izda, int dcha, tBoolean PorNumero)
+void QuickSort (tNodo *incidencias, int izda, int dcha, tBoolean PorNumero)
 { 
   /* A RELLENAR POR EL ALUMNO */
 }
 
 
-int Menu (void)
+int Menu ()
 {
 	int opcion;
 
@@ -188,22 +214,22 @@ int Menu (void)
     return opcion;
 } /*fin menu*/
 
-void BuscarIncidencia (unsigned Incidencia, tIncidencia *p, unsigned Cantidad)
+void BuscarIncidencia (unsigned Incidencia, tNodo *incidencias, unsigned Cantidad)
 {
   /* A RELLENAR POR EL ALUMNO */
 }
 
-void GuardarIncidencias (tIncidencia *p, unsigned N)
+void GuardarIncidencias (tNodo *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
 }
 
-void LeerIncidencias (tIncidencia *p, unsigned N)
+void LeerIncidencias (tNodo *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
 }
 
-void OrdenarIncidencias (tIncidencia *p, unsigned N)
+void OrdenarIncidencias (tNodo *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
  
@@ -216,17 +242,7 @@ void ModificarIncidencia (unsigned Incidencia, tIncidencia *p, unsigned Cantidad
 
 void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
 {
-  unsigned NumIncidencia;
-unsigned Prioridad;
-char Asunto[150];
-char Sistema[9];
-char Subsistema[9];
-char Fecha[11];
-char Descripcion [500];
-unsigned Estado;
-
-  int i=0; //Variable de posicion
-  int j=0; //Variable de posicion
+ 
     if(incidencia==NULL)
     {
       printf("No existe tal incidencia\n");
@@ -234,35 +250,21 @@ unsigned Estado;
     }
 
     printf("La incidencia requerida es:\n");
-    printf("Numero de incidencia: %d\n", &incidencia.NumIncidencia);
-    printf("Prioridad: %d\n", &incidencia.Prioridad );
+    printf("Numero de incidencia: %d\n", incidencia->NumIncidencia);
+    printf("Prioridad: %d\n", incidencia->Prioridad );
     
-    for(i=0; i<150; i++)
-    {
-      printf("Asunto: %s\n", incidencia->Asunto[i]);
-      return 0;
-    }
+   
+      printf("Asunto: %s\n", incidencia->Asunto);
+      
+      printf("Sistema: %s\n", incidencia->Sistema);
+  
+      printf("Subsistema: %s\n", incidencia->Subsistema);
 
-    for(i=0; i<9; i++)
-    {
-      printf("Sistema: %s\n", incidencia->Sistema[i]);
-      for (j=0; j<9; j++)
-      {
-        printf("Subsistema: %s\n", incidencia->Subsistema[i]);
-      }
-    }
+      printf("Fecha: %s\n", incidencia->Fecha);
 
-    for(i=0; i<11; i++)
-    {
-      printf("Fecha: %s\n", incidencia->Fecha[i]);
-    }
-
-    for (i=0; i<500 ; i++)
-    {
       printf("Descripcion:%s\n", incidencia->Descripcion);
-    }
 
-    printf("Estado: %d\n", &incidencia.Estado);
+      printf("Estado: %d\n", incidencia->Estado);
 
 }
 
@@ -273,21 +275,27 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
   char variableAuxiliar[1500];
 
   printf("Buenos dias, usuario\n");
+	do
+	{
+ 		printf("Introduce numero de la incidencia a guardar\n");
+		fflush(stdin);
+  		scanf("%d", &incidencia->NumIncidencia);
+  		while(getchar()!= '\n');
+  		if(incidencia->NumIncidencia <= 0){
+  			printf("\n El numero de incidencia debe ser mayor de 0.\n");
+		}
+  	}while(incidencia->NumIncidencia <= 0);
 
-  printf("Introduce numero de la incidencia a guardar\n");
-  fflush(stdin);
-  scanf("%d", &incidencia->NumIncidencia);
-
-do{
-  printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
-  fflush(stdin);
-  scanf("%d", &incidencia->Prioridad);
-  if(strlen(variableAuxiliar)>4)
-  {
-    printf("Se ha excedido la longitud del array\n");
-  }
-}
-while(strlen(variableAuxiliar)>4);
+	do{
+		printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
+	    fflush(stdin);
+        scanf("%d", &incidencia->Prioridad);
+        if(strlen(variableAuxiliar)>4)
+	    {
+		    printf("Se ha excedido la longitud del array\n");
+	    }
+	}
+	while(strlen(variableAuxiliar)>4);
   
     do{
            printf("Introduce el asunto\n");
