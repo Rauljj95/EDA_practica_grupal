@@ -50,7 +50,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: nueva posición del pivote.
 EECTOS COLATERALES: No tiene. 
 */
-int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero);
+unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tBoolean PorNumero);
 
 /**
 NOMBRE: QuickSort.
@@ -63,7 +63,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void QuickSort (tIncidencia *incidencias, int izda, int dcha, tBoolean PorNumero);
+void QuickSort (tIncidencia *incidencias, unsigned izda, unsigned dcha, tBoolean PorNumero);
 
 /**
 NOMBRE: GuardarIncidencias
@@ -209,11 +209,12 @@ void Copiar(tIncidencia *origen, tIncidencia *destino)
 }
 
 
-int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero)
+unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tBoolean PorNumero)
 {
 
-	int i = primero+1, j = ultimo;
-  	tIncidencia *aux = calloc(1, sizeof(tIncidencia));
+	unsigned i = primero+1, j = ultimo;
+  	/*tIncidencia aux = calloc(1, sizeof(tIncidencia));*/
+  tIncidencia aux;
   	unsigned pivote = 0;
   		//Elegimos la posicion del pivote.
   		// Si el vector tiene un  tamaño mayor que 3 se elige el pivote. En caso contrario
@@ -226,11 +227,9 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
 	
 	//Hasta que i y j se crucen se va recorriendo el vector y poniendo los elementos menores o iguales del pivote a su izquierda
 	//y los valores mayores a su derecha
-	while(i <= j)
-	{
-    printf("i = %d, j = %d\n", i, j);
-    getchar();
-		if(i <= j)
+	while(i <= j && j > 0)
+	{   
+		if(i <= j && j > 0)
 		{
 			if(PorNumero == TRUE)
 			{
@@ -254,9 +253,9 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
       {
 				if(incidencias[j].NumIncidencia <= pivote && incidencias[i].NumIncidencia > pivote) 
 				{	
-					Copiar(incidencias+i, aux);
+					Copiar(incidencias+i, &aux);
 					Copiar(incidencias+j, incidencias+i);
-					Copiar(aux, incidencias+j);
+					Copiar(&aux, incidencias+j);
 					i++;
 					j--;
 				}
@@ -265,9 +264,9 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
       {
         if(incidencias[j].Prioridad <= pivote && incidencias[i].Prioridad > pivote) 
         { 
-          Copiar(incidencias+i, aux);
+          Copiar(incidencias+i, &aux);
           Copiar(incidencias+j, incidencias+i);
-          Copiar(aux, incidencias+j);
+          Copiar(&aux, incidencias+j);
           i++;
           j--;
         }
@@ -279,23 +278,27 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
 	//Intercambiamos el primer elemento, que era el pivote, por la posicion de j
 	//Asi los elementos mayores al pivote se encontraran a su derecha y los menores o iguales
 	// a su izquierda
-		Copiar(incidencias+primero, aux);
+  if(j!=primero)
+  {
+		Copiar(incidencias+primero, &aux);
 		Copiar(incidencias+j, incidencias+primero);
-		Copiar(aux, incidencias+j);
-		free(aux);
+		Copiar(&aux, incidencias+j);
+  }
+	
 
 	return j;
 
 }
 
-void QuickSort (tIncidencia *incidencias, int izda, int dcha, tBoolean PorNumero)
+void QuickSort (tIncidencia *incidencias, unsigned izda, unsigned dcha, tBoolean PorNumero)
 { 
    //Variables: posicion del pivote
-  int pivote = 0;
+  unsigned pivote = 0;
   //Hasta que se crucen la primera y ultima posicion se llama a la funcion de forma recursiva
   if(izda < dcha)
   {
   	pivote = Partir(incidencias, izda, dcha, PorNumero);
+    if(dcha != 0)
   	QuickSort (incidencias, izda, pivote-1, PorNumero);
     QuickSort (incidencias, pivote+1, dcha, PorNumero);
   }
@@ -306,7 +309,7 @@ int Menu ()
 {
 	int opcion;
 
-        system("cls");
+  
 
 	      printf (" \n  ***************************** Opciones ********************************");
 	      printf (" \n  *   1. Registrar incidencia.                                          *");
@@ -443,7 +446,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 	{
  		printf("Introduce numero de la incidencia a guardar\n");
 		fflush(stdin);
-  		scanf("%d", &incidencia->NumIncidencia);
+  		scanf("%u", &incidencia->NumIncidencia);
   		while(getchar()!= '\n');
   		if(incidencia->NumIncidencia <= 0){
   			printf("\n El numero de incidencia debe ser mayor de 0.\n");
@@ -453,7 +456,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 	do{
 		printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
 	    fflush(stdin);
-        scanf("%d", &incidencia->Prioridad);
+        scanf("%u", &incidencia->Prioridad);
         while(getchar()!='\n');
         if(incidencia->Prioridad  >4 || incidencia->Prioridad<1)
 	    {
@@ -540,7 +543,7 @@ do{
   incidencia->Estado=-1;
   printf("Introduce el estado\n");
   fflush(stdin);
-  scanf("%d", &incidencia->Estado);
+  scanf("%u", &incidencia->Estado);
   while(getchar()!='\n');
   if(incidencia->Estado >2)
       {
@@ -573,7 +576,7 @@ tIncidencia *AgregarIncidencia( tIncidencia *incidencias , unsigned Cantidad) //
 
 void TodasIncidencias(tIncidencia *incidencias, unsigned Cantidad)
 {
-    int posicion=0; //Variable de posicion
+    unsigned posicion=0; //Variable de posicion
 
     if(incidencias==NULL)
     {
@@ -593,7 +596,6 @@ int main ()
     tIncidencia *pIncidencias;   
     unsigned Cantidad=0;
     unsigned Opcion;
-    int i;
     unsigned Incidencia;
     unsigned Indice;
 
@@ -605,11 +607,11 @@ int main ()
      system("clear");
      switch (Opcion)
     {
-      case 1:  
+        case 1:  
               printf("Agregar incidencia:\n");
               Cantidad++;
               pIncidencias=AgregarIncidencia(pIncidencias, Cantidad);
-              system("PAUSE");
+              
               break;
 
         case 2:
@@ -629,46 +631,49 @@ int main ()
                 {
                   printf("Lo sentimos, incidencia no encontrada.\n");
                 }
-                system("PAUSE");
+                //system("PAUSE");
                 break;
         case 3: 
           
                printf("Numero de incidencia a modificar\n");
                scanf("%d",&Incidencia);
                //ModificarIncidencia (Incidencia, pIncidencias, Cantidad);
-               system("PAUSE");
+               
                break;
 
         case 4:
                 printf("Guardar incidencias\n");
                 //GuardarIncidencias(pIncidencias, Cantidad);
-                system("PAUSE");
+                
                 break;
 
         case 5:
                 printf("Leer incidencias\n");
                 //LeerIncidencias (pIncidencias, Cantidad);
-                system("PAUSE");
+                
                 break;
         
         case 6:
                 printf("Mostrar incidencias por prioridad\n");
                 OrdenarIncidencias (pIncidencias, Cantidad);
-                system("PAUSE");
+                
                 break;
 
         case 7: 
                 printf("Mostrar incidencias por numero de incidencia\n");
                 TodasIncidencias(pIncidencias, Cantidad);
-                system("PAUSE");
+                
                 break;
         case 8: 
                 printf("Salir.");
                 break;
 
         default: printf("Ha tecleado una opcion incorrecta\n");
+           
                  break;
     }
+    while(getchar()!= '\n');
+    system("clear");
    } while (Opcion!= 8);
     free(pIncidencias);   
     return 0; 
