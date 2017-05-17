@@ -38,6 +38,7 @@ char Descripcion [500];
 unsigned Estado;
 }tIncidencia;
 
+<<<<<<< HEAD
 
 typedef struct
 {
@@ -46,24 +47,10 @@ typedef struct
 	tIncidencia *incidencia;
 }tNodo;
 
+=======
+>>>>>>> master
 
-/**
-NOMBRE: CrearNodo
-DESCRIPCION: Crea un nuevo nodo para la lista.
-PARAMETROS DE ENTRADA: ninguno
-PARAMETROS DE SALIDA:
-tNodo *: puntero al nevo nodo creado.
-*/
-tNodo *CrearNodo();
 
-/**
-NOMBRE: EliminarIncidencias
-DESCRIPCION: Libera la lista con incidencias.
-PARAMETROS DE ENTRADA: tNodo*: Lista a eliminar
-PARAMETROS DE SALIDA: ninguno
-
-*/
-void EliminarLista(tNodo *incidencias);
 
 
 
@@ -78,7 +65,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: nueva posición del pivote.
 EECTOS COLATERALES: No tiene. 
 */
-int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero);
+int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero);
 
 /**
 NOMBRE: QuickSort.
@@ -91,7 +78,7 @@ PorNumero: indica si la ordenacion se va a realizar por número de incidencia (TR
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void QuickSort (tNodo *Incidencias, int izda, int dcha, tBoolean PorNumero);
+void QuickSort (tIncidencia *incidencias, int izda, int dcha, tBoolean PorNumero);
 
 /**
 NOMBRE: GuardarIncidencias
@@ -103,7 +90,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void GuardarIncidencias (tNodo *incidencias, unsigned N);
+void GuardarIncidencias (tIncidencia *incidencias, unsigned N);
 
 /**
 NOMBRE: LeerIncidencias
@@ -114,7 +101,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void LeerIncidencias (tNodo *incidencias, unsigned N);
+void LeerIncidencias (tIncidencia *incidencias, unsigned N);
 
 /**
 NOMBRE: OrdenarIncidencias
@@ -127,7 +114,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void OrdenarIncidencias (tNodo *incidencias, unsigned N);
+void OrdenarIncidencias (tIncidencia *incidencias, unsigned N);
 
 /**
 NOMBRE: ModificarIncidencia
@@ -151,8 +138,8 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-//LO HARA POR BUSQUEDA BINARIA
-void BuscarIncidencia (unsigned Incidencia, tNodo *incidencias, unsigned Cantidad);
+
+void BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned Cantidad);
 
 
 //Funciones generadas por nosotros:
@@ -178,6 +165,7 @@ EECTOS COLATERALES: No tiene.
 void PedirDatos (tIncidencia *incidencia);
 
 
+<<<<<<< HEAD
 
 //Funciones generadas por nosotros:
 
@@ -206,6 +194,9 @@ void PedirDatos (tIncidencia *incidencia);
 
 int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero) 
 
+=======
+int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero)
+>>>>>>> master
 {
    
 
@@ -216,7 +207,7 @@ int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero)
 }
 
 
-void QuickSort (tNodo *incidencias, int izda, int dcha, tBoolean PorNumero)
+void QuickSort (tIncidencia *incidencias, int izda, int dcha, tBoolean PorNumero)
 { 
   /* A RELLENAR POR EL ALUMNO */
 }
@@ -246,22 +237,26 @@ int Menu ()
     return opcion;
 } /*fin menu*/
 
-void BuscarIncidencia (unsigned Incidencia, tNodo *incidencias, unsigned Cantidad)
+void BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned Cantidad)
 {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> master
 }
 
-void GuardarIncidencias (tNodo *incidencias, unsigned N)
+void GuardarIncidencias (tIncidencia *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
 }
 
-void LeerIncidencias (tNodo *incidencias, unsigned N)
+void LeerIncidencias (tIncidencia *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
 }
 
-void OrdenarIncidencias (tNodo *incidencias, unsigned N)
+void OrdenarIncidencias (tIncidencia *incidencias, unsigned N)
 {
   /* A RELLENAR POR EL ALUMNO */
  
