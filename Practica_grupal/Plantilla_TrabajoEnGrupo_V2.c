@@ -124,7 +124,8 @@ RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
 
-void BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned Cantidad);
+tBoolean BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned inicio, unsigned Cantidad, unsigned *posicion);
+
 
 
 //Funciones generadas por nosotros:
@@ -314,7 +315,7 @@ int Menu ()
         printf (" \n  *   4. Guardar incidencias.                                           *");
         printf (" \n  *   5. Leer incidencias por prioridad.                                *");
         printf (" \n  *   6. Ordenar incidencias por prioridad.                             *");
-        printf("  \n  *   7. Mostrar incidencias por numero.                                * ");
+        printf("  \n  *   7. Mostrar incidencias por numero.                                *");
         printf (" \n  *   8. Salir.                                                         *");
 	      printf (" \n  ***********************************************************************");
 
@@ -326,8 +327,41 @@ int Menu ()
     return opcion;
 } /*fin menu*/
 
-void BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned Cantidad)
+
+tBoolean BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned inicio, unsigned Cantidad, unsigned *posicion)
 {
+   tBoolean encontrado = FALSE;
+   unsigned mitad= ( inicio +Cantidad )/ 2;
+ 
+   if(incidencias[mitad].NumIncidencia==Incidencia )
+   {
+    *posicion = mitad;
+    encontrado = TRUE;
+   }
+   else if(incidencias[inicio].NumIncidencia==Incidencia)
+   {
+       *posicion = inicio;
+       encontrado = TRUE;
+   }
+   else if(incidencias[Cantidad].NumIncidencia==Incidencia)
+    {
+       *posicion = Cantidad;
+       encontrado = TRUE;
+    }
+    else if(inicio == Cantidad)
+    {
+        return encontrado;
+    }
+    else if(incidencias[mitad].NumIncidencia<Incidencia)
+        {
+          encontrado = BuscarIncidencia(Incidencia, incidencias, mitad+1, Cantidad, posicion);
+        }
+    else if(incidencias[mitad].NumIncidencia>Incidencia)
+        {
+          encontrado = BuscarIncidencia(Incidencia, incidencias, inicio, mitad-1, posicion);
+        }
+   return encontrado;
+
 
 }
 
@@ -372,7 +406,7 @@ void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
       return;
     }
 
-      printf("La incidencia requerida es:\n");
+      printf("\n\nLa incidencia requerida es:\n");
 
       printf("Numero de incidencia: %d\n", incidencia->NumIncidencia);
 
@@ -432,7 +466,8 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     do{
            printf("Introduce el asunto\n");
            fflush(stdin);
-           gets(variableAuxiliar);
+           fgets(variableAuxiliar, 1500, stdin);
+           variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
           
           if(strlen(variableAuxiliar)>150)
           {
@@ -445,7 +480,8 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     do{
            printf("Introduce el sistema\n");
            fflush(stdin);
-           gets(variableAuxiliar);
+            fgets(variableAuxiliar, 1500, stdin);
+           variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
 
            if(strlen(variableAuxiliar)>9)
            {
@@ -461,7 +497,8 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     do{
         printf("Introduce el Subsistema\n");
         fflush(stdin);
-        gets(variableAuxiliar);
+         fgets(variableAuxiliar, 1500, stdin);
+           variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
 
         if(strlen(variableAuxiliar)>9)
         {
@@ -482,7 +519,8 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 
       printf("Introduce la Descripcion\n");
       fflush(stdin);
-      gets(variableAuxiliar);
+       fgets(variableAuxiliar, 1500, stdin);
+           variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
 
       if(strlen(variableAuxiliar)>500)
       {
@@ -490,7 +528,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
       }
       else if (variableAuxiliar[0]=='\0')
       {
-
+          printf("La descripcion no puede estar vacia.\n");
       }
     }
     while(strlen(variableAuxiliar)>500 || variableAuxiliar[0]=='\0');
@@ -557,7 +595,8 @@ int main ()
     unsigned Opcion;
     int i;
     unsigned Incidencia;
-    
+    unsigned Indice;
+
     pIncidencias=NULL;
 
     do
@@ -576,7 +615,20 @@ int main ()
         case 2:
                 printf("Numero de incidencia a buscar\n");
                 scanf("%d",&Incidencia);
-                //BuscarIncidencia(Incidencia, pIncidencias, Cantidad);
+                if(BuscarIncidencia(Incidencia, pIncidencias, 0, Cantidad-1, &Indice)!=FALSE)
+                 { 
+                  printf("\nLa incidencia se ha encontrado con exito. La incidencia es:\n");
+                  printf("\n\nNumero de incidencia: %u", pIncidencias[Indice].NumIncidencia);
+                  printf("\n\nPrioridad: %u", pIncidencias[Indice].Prioridad);
+                  printf("\n\nAsunto: %s", pIncidencias[Indice].Asunto);
+                  printf("\n\nSistema: %s", pIncidencias[Indice].Sistema);
+                  printf("\n\nSubsistema:  %s", pIncidencias[Indice].Subsistema);
+                  printf("\n\nDescripcion: %s", pIncidencias[Indice].Descripcion);
+                  }
+                else
+                {
+                  printf("Lo sentimos, incidencia no encontrada.\n");
+                }
                 system("PAUSE");
                 break;
         case 3: 
