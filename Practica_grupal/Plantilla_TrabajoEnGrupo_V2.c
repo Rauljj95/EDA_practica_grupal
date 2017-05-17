@@ -179,8 +179,6 @@ void PedirDatos (tIncidencia *incidencia);
 
 
 
-
-
 //Funciones generadas por nosotros:
 
 /**
@@ -206,10 +204,14 @@ void PedirDatos (tIncidencia *incidencia);
 
 
 
-int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero)
+int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero) 
 
 {
-   /* A RELLENAR POR EL ALUMNO */ 
+   
+
+/* A RELLENAR POR EL ALUMNO */
+
+
   return 0;
 }
 
@@ -246,7 +248,7 @@ int Menu ()
 
 void BuscarIncidencia (unsigned Incidencia, tNodo *incidencias, unsigned Cantidad)
 {
-  /* A RELLENAR POR EL ALUMNO */
+  
 }
 
 void GuardarIncidencias (tNodo *incidencias, unsigned N)
@@ -443,6 +445,8 @@ int main ()
         break;
 
         case 2:
+        printf("Guardar incidencia:\n");
+
           GuardarIncidencias (pIncidencias, Cantidad);
           system("PAUSE");
           break;
@@ -451,40 +455,7 @@ int main ()
           
           Cantidad=Cantidad+1;
           
-          
-          pIncidencias = (tIncidencia *)realloc((tIncidencia *)pIncidencias, Cantidad*sizeof(tIncidencia));
-          
-          for (i=0; i<Cantidad; i++)
-          { 
-           printf("Numero: ");
-           fflush(stdin);
-           scanf("%u",&((pIncidencias+i)->NumIncidencia));
-
-           printf("Prioridad: ");
-           fflush(stdin);
-           scanf("%u",&((pIncidencias+i)->Prioridad));
-           
-           printf("Asunto: ");
-           fflush(stdin);
-           scanf("%s",(pIncidencias+i)->Asunto);
-            
-           printf("Sistema: ");
-           fflush(stdin);
-           scanf("%s",(pIncidencias+i)->Sistema);
-            
-           printf("Subsistema: ");
-           fflush(stdin);
-           scanf("%s",(pIncidencias+i)->Subsistema);
-           
-           printf("Descripcion: ");
-           fflush(stdin);
-           scanf("%s",(pIncidencias+i)->Descripcion);
-
-           printf("Estado (0 -> Creada, 1 -> Resolviendose, 2 -> Solucionada): ");
-           fflush(stdin);
-           scanf("%u",&(pIncidencias+i)->Estado);
-             
-          }
+         
           system("PAUSE");
           break;
 
