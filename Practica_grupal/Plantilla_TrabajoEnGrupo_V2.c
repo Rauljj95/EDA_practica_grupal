@@ -38,22 +38,6 @@ char Descripcion [500];
 unsigned Estado;
 }tIncidencia;
 
-<<<<<<< HEAD
-
-typedef struct
-{
-	tNodo *anterior;
-	tNodo *siguiente;
-	tIncidencia *incidencia;
-}tNodo;
-
-=======
->>>>>>> master
-
-
-
-
-
 /**
 NOMBRE: Partir.
 DESCRIPCIÓN: Función que devuelve la nueva posición del pivote y que separa los dos subvectores que son  tratados en las dos siguientes llamadas recursivas a QuickSort.
@@ -164,8 +148,17 @@ EECTOS COLATERALES: No tiene.
 */
 void PedirDatos (tIncidencia *incidencia);
 
+/**
+NOMBRE: AgregarIncidencia
+DESCRIPCIÓN: Funcion que inserta la incidencia requerida al usuario.
+PARAMETROS DE ENTRADA/SALIDA:
+Incidencia: incidencia a pedir sus datos.
+Cantidad: cantidad de incidencias
+RETORNO DE LA FUNCIÓN: Devuelve el puntero incidencia.
+EECTOS COLATERALES: El hecho de que el almacen de incidencias aumenta en cantidad al añadir la incidencia.
+*/
+tIncidencia *AgregarIncidencia( tIncidencia *incidencias , unsigned Cantidad);
 
-<<<<<<< HEAD
 
 //Funciones generadas por nosotros:
 
@@ -190,13 +183,8 @@ EECTOS COLATERALES: No tiene.
 void PedirDatos (tIncidencia *incidencia);
 
 
-
-
-int Partir (tNodo *incidencias, int primero, int ultimo, tBoolean PorNumero) 
-
-=======
 int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero)
->>>>>>> master
+
 {
    
 
@@ -239,11 +227,7 @@ int Menu ()
 
 void BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsigned Cantidad)
 {
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> master
 }
 
 void GuardarIncidencias (tIncidencia *incidencias, unsigned N)
@@ -304,22 +288,6 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 
   printf("Buenos dias, usuario\n");
 
-
-  printf("Introduce numero de la incidencia a guardar\n");
-  fflush(stdin);
-  scanf("%d", &incidencia->NumIncidencia);
-
-do{
-  printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
-  fflush(stdin);
-  scanf("%d", &incidencia->Prioridad);
-  if(strlen(variableAuxiliar)>4)
-  {
-    printf("Se ha excedido la longitud del array\n");
-  }
-}
-while(strlen(variableAuxiliar)>4);
-
 	do
 	{
  		printf("Introduce numero de la incidencia a guardar\n");
@@ -328,19 +296,20 @@ while(strlen(variableAuxiliar)>4);
   		while(getchar()!= '\n');
   		if(incidencia->NumIncidencia <= 0){
   			printf("\n El numero de incidencia debe ser mayor de 0.\n");
-		}
+		    }
   	}while(incidencia->NumIncidencia <= 0);
 
 	do{
 		printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
 	    fflush(stdin);
         scanf("%d", &incidencia->Prioridad);
-        if(strlen(variableAuxiliar)>4)
+        while(getchar()!='\n');
+        if(incidencia->Prioridad >3)
 	    {
-		    printf("Se ha excedido la longitud del array\n");
+		    printf("Por favor, introduzca un numero perteneciente al intervalo [1,4]\n");
 	    }
 	}
-	while(strlen(variableAuxiliar)>4);
+	while(incidencia->Prioridad >3);
 
   
     do{
@@ -353,38 +322,46 @@ while(strlen(variableAuxiliar)>4);
               printf("Se ha excedido la longitud del array\n");
           }
     }
-    while(strlen(variableAuxiliar)>150);
-
+    while(strlen(variableAuxiliar)>150 );
+    strcpy(incidencia->Asunto, variableAuxiliar);
 
     do{
            printf("Introduce el sistema\n");
            fflush(stdin);
-           gets(incidencia->Sistema);
+           gets(variableAuxiliar);
 
            if(strlen(variableAuxiliar)>9)
            {
               printf("Se ha excedido la longitud del array\n");
            }
+          else if(variableAuxiliar[0]=='\0') //Si esta vacio, se lo decimos al usuario
+            printf("Si no conoce a que sistema afecta la incidencia, por favor, teclee '-'.\n");
+
       }
-    while(strlen(variableAuxiliar)>9);
+    while(strlen(variableAuxiliar)>9 || variableAuxiliar[0]=='\0');
+    strcpy(incidencia->Sistema, variableAuxiliar);
 
     do{
         printf("Introduce el Subsistema\n");
         fflush(stdin);
-        gets(incidencia->Subsistema);
+        gets(variableAuxiliar);
 
         if(strlen(variableAuxiliar)>9)
         {
           printf("Se ha excedido la longitud del array\n");
         }
+        else if(variableAuxiliar[0]=='\0') //Si esta vacio, se lo decimos al usuario
+            printf("Si no conoce a que sistema afecta la incidencia, por favor, teclee '-'.\n");
+      
+      
       }
-    while(strlen(variableAuxiliar)>9);
-    
+    while(strlen(variableAuxiliar)>9 || variableAuxiliar[0]=='\0');
+    strcpy(incidencia->Subsistema, variableAuxiliar);
   
     do{
       printf("Introduce la fecha\n");
       fflush(stdin);
-      gets(incidencia->Fecha);
+      gets(variableAuxiliar);
 
       if(strlen(variableAuxiliar)>11)
       {
@@ -392,39 +369,75 @@ while(strlen(variableAuxiliar)>4);
       }
     }
     while(strlen(variableAuxiliar)>11);
-    
+    strcpy(incidencia->Fecha, variableAuxiliar);
   
 
     do{
 
       printf("Introduce la Descripcion\n");
       fflush(stdin);
-      gets(incidencia->Descripcion);
+      gets(variableAuxiliar);
 
       if(strlen(variableAuxiliar)>500)
       {
         printf("Se ha excedido la longitud del array\n");
       }
-    }
-    while(strlen(variableAuxiliar)>500);
+      else if (variableAuxiliar[0]=='\0')
+      {
 
+      }
+    }
+    while(strlen(variableAuxiliar)>500 || variableAuxiliar[0]=='\0');
+
+    strcpy(incidencia->Descripcion, variableAuxiliar);
+  
+
+do{
   printf("Introduce el estado\n");
   fflush(stdin);
   scanf("%d", &incidencia->Estado);
+  while(getchar()!='\n');
+  if(incidencia->Estado >2)
+      {
+        printf("No es posible. El estado puede ser: 0, 1 o 2\n");
+      }
+
+}while(incidencia->Estado >2);
 
   
+}
+
+
+tIncidencia *AgregarIncidencia( tIncidencia *incidencias , unsigned Cantidad) //AUTORIA: RAUL Y BEA
+{
+    if(incidencias==NULL)
+    {
+          incidencias=(tIncidencia*)calloc(Cantidad, sizeof(tIncidencia));
+    }
+    else 
+          incidencias=(tIncidencia*)realloc(incidencias, Cantidad);
+
+    PedirDatos(&incidencias[Cantidad-1]);
+    printf("Incidencia agregada:\n");
+    MostrarIncidencia(&incidencias[Cantidad-1]);
+    return incidencias;
 }
 
 
 int main ()
 {
     tIncidencia *pIncidencias;   
-    unsigned Cantidad=0;
+    unsigned Cantidad=1;
     unsigned Opcion;
     int i;
     unsigned Incidencia;
     
     pIncidencias=NULL;
+
+    tIncidencia bea; 
+    PedirDatos(&bea);
+    MostrarIncidencia(&bea);
+    getchar();
 
     do
    {
@@ -432,10 +445,7 @@ int main ()
      switch (Opcion)
     {
       case 1:  
-        
-        printf("Numero de incidencia a buscar\n");
-        scanf("%d",&Incidencia);
-        BuscarIncidencia (Incidencia, pIncidencias, Cantidad);
+      
         system("PAUSE");
         break;
 
@@ -446,10 +456,9 @@ int main ()
           system("PAUSE");
           break;
         case 3: 
-
           
-          Cantidad=Cantidad+1;
-          
+           pIncidencias=AgregarIncidencia(pIncidencias, Cantidad);
+           Cantidad++;
          
           system("PAUSE");
           break;
