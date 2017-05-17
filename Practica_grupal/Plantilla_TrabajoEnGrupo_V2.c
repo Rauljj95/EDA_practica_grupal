@@ -187,8 +187,8 @@ void Copiar(tIncidencia *origen, tIncidencia *destino)
 	strcpy(destino->Asunto, origen->Asunto);
 	strcpy(destino->Descripcion, origen->Descripcion);
 	strcpy(destino->Fecha, origen->Fecha);
-	strpy(destino->Sistema, origen->Sistema);
-	strpy(destino->Subsistema, origen->Subsistema);
+	strcpy(destino->Sistema, origen->Sistema);
+	strcpy(destino->Subsistema, origen->Subsistema);
 	destino->Estado = origen->Estado;
 	destino->NumIncidencia = origen->NumIncidencia;
 	destino->Prioridad = origen->Prioridad;	
@@ -216,9 +216,9 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
   		//El pivote sera el primer elemento del vector
 		
 	if(PorNumero == TRUE)
-		pivote = incidencias[0]->NumIncidencia;
+		pivote = incidencias[primero].NumIncidencia;
 	else
-		pivote = incidencias[0]->Prioridad;
+		pivote = incidencias[primero].Prioridad;
 	
 	//Hasta que i y j se crucen se va recorriendo el vector y poniendo los elementos menores o iguales del pivote a su izquierda
 	//y los valores mayores a su derecha
@@ -247,7 +247,7 @@ int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumer
 			if(PorNumero == TRUE)
 				if(incidencias[j].NumIncidencia <= pivote && incidencias[i].NumIncidencia > pivote) 
 				{	
-					Copiar(incidencia+i, &aux);
+					Copiar(incidencias+i, &aux);
 					Copiar(incidencias+j, incidencias+i);
 					Copiar(&aux, incidencias+j);
 
