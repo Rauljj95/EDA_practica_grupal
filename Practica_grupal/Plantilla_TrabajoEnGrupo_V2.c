@@ -182,22 +182,107 @@ EECTOS COLATERALES: No tiene.
 */
 void PedirDatos (tIncidencia *incidencia);
 
+void Copiar(tIncidencia *origen, tIncidencia *destino)
+{
+	strcpy(destino->Asunto, origen->Asunto);
+	strcpy(destino->Descripcion, origen->Descripcion);
+	strcpy(destino->Fecha, origen->Fecha);
+	strpy(destino->Sistema, origen->Sistema);
+	strpy(destino->Subsistema, origen->Subsistema);
+	destino->Estado = origen->Estado;
+	destino->NumIncidencia = origen->NumIncidencia;
+	destino->Prioridad = origen->Prioridad;	
+}
+
 
 int Partir (tIncidencia *incidencias, int primero, int ultimo, tBoolean PorNumero)
 
 {
    
 
-/* A RELLENAR POR EL ALUMNO */
+/*
+ 	Declaracion de variables:
+ 	pivote: valor del pivote
+ 	aux: valor auxiliar para intercambio de posiciones
+ 	i = indice izquierdo del vector
+ 	j = indice derecho del vector
+ 	p = posicion central del vector
+ 	*/
+	int i = primero+1, j = ultimo;
+  	tIncidencia aux;
+  	unsigned pivote = 0;
+  		//Elegimos la posicion del pivote.
+  		// Si el vector tiene un  tamaño mayor que 3 se elige el pivote. En caso contrario
+  		//El pivote sera el primer elemento del vector
+		
+	if(PorNumero == TRUE)
+		pivote = incidencias[0]->NumIncidencia;
+	else
+		pivote = incidencias[0]->Prioridad;
+	
+	//Hasta que i y j se crucen se va recorriendo el vector y poniendo los elementos menores o iguales del pivote a su izquierda
+	//y los valores mayores a su derecha
+	while(i <= j)
+	{
+		if(i <= j)
+		{
+			if(PorNumero == TRUE)
+			{
+				if(incidencias[i].NumIncidencia <= pivote)
+				i++;
+				if(incidencias[j].NumIncidencia > pivote)
+				j--;
+			}
+			else
+			{
+				if(incidencias[i].Prioridad <= pivote)
+				i++;
+				if(incidencias[j].Prioridad > pivote)
+				j--;
+			}
+		}
+		
+		if(i < j)
+		{
+			if(PorNumero == TRUE)
+				if(incidencias[j].NumIncidencia <= pivote && incidencias[i].NumIncidencia > pivote) 
+				{	
+					Copiar(incidencia+i, &aux);
+					Copiar(incidencias+j, incidencias+i);
+					Copiar(&aux, incidencias+j);
+
+					i++;
+					j--;
+				}
+		}
+			
+	}
+	
+	//Intercambiamos el primer elemento, que era el pivote, por la posicion de j
+	//Asi los elementos mayores al pivote se encontraran a su derecha y los menores o iguales
+	// a su izquierda
+		Copiar(incidencias+primero, &aux);
+		Copiar(incidencias+j, incidencias+primero);
+		Copiar(&aux, incidencias+j);
+		
+
+	return j;
 
 
   return 0;
 }
 
-
 void QuickSort (tIncidencia *incidencias, int izda, int dcha, tBoolean PorNumero)
 { 
-  /* A RELLENAR POR EL ALUMNO */
+   //Variables: posicion del pivote
+  int pivote = 0;
+  //Hasta que se crucen la primera y ultima posicion se llama a la funcion de forma recursiva
+  if(izda < dcha)
+  {
+  	pivote = Partir(incidencias, izda, dcha, PorNumero);
+  	QuickSort (incidencias, izda, pivote-1, PorNumero);
+	QuickSort (incidencias, pivote+1, dcha, PorNumero);
+  }
 }
 
 
