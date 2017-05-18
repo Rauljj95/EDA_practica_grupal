@@ -25,7 +25,6 @@
 /* ZONA DE DECLARACIÓN DE TIPOS*/
 
 typedef enum {FALSE, TRUE} tBoolean;
-
 /* Tipo con la informacion de una incidencia */
 typedef struct 
 {
@@ -86,7 +85,7 @@ N: número de incidencias.
 RETORNO DE LA FUNCIÓN: No tiene.
 EECTOS COLATERALES: No tiene. 
 */
-void LeerIncidencias (tIncidencia *incidencias, unsigned N);
+tIncidencia * LeerIncidencias (tIncidencia *incidencias, unsigned *N);
 
 /**
 NOMBRE: OrdenarIncidencias
@@ -211,10 +210,11 @@ void Copiar(tIncidencia *origen, tIncidencia *destino)
 
 unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tBoolean PorNumero)
 {
-
+	printf("\nprimero = %u ultimo = %u\n", primero, ultimo);
+	getchar();
 	unsigned i = primero+1, j = ultimo;
   	/*tIncidencia aux = calloc(1, sizeof(tIncidencia));*/
-  tIncidencia aux;
+  	tIncidencia aux;
   	unsigned pivote = 0;
   		//Elegimos la posicion del pivote.
   		// Si el vector tiene un  tamaño mayor que 3 se elige el pivote. En caso contrario
@@ -227,9 +227,11 @@ unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tB
 	
 	//Hasta que i y j se crucen se va recorriendo el vector y poniendo los elementos menores o iguales del pivote a su izquierda
 	//y los valores mayores a su derecha
-	while(i <= j && j > 0)
+	while(i <= j )
 	{   
-		if(i <= j && j > 0)
+	printf("Valor de i = %u j = % u", i, j);
+	getchar(); 
+		if(i <= j)
 		{
 			if(PorNumero == TRUE)
 			{
@@ -242,7 +244,7 @@ unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tB
 			{
 				if(incidencias[i].Prioridad <= pivote)
 				i++;
-				if(incidencias[j].Prioridad > pivote)
+				if(incidencias[j].Prioridad > pivote )
 				j--;
 			}
 		}
@@ -250,7 +252,7 @@ unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tB
 		if(i < j)
 		{
 			if(PorNumero == TRUE)
-      {
+      		{
 				if(incidencias[j].NumIncidencia <= pivote && incidencias[i].NumIncidencia > pivote) 
 				{	
 					Copiar(incidencias+i, &aux);
@@ -259,17 +261,17 @@ unsigned Partir (tIncidencia *incidencias, unsigned primero, unsigned ultimo, tB
 					i++;
 					j--;
 				}
-      }
-      else
-      {
-        if(incidencias[j].Prioridad <= pivote && incidencias[i].Prioridad > pivote) 
-        { 
-          Copiar(incidencias+i, &aux);
-          Copiar(incidencias+j, incidencias+i);
-          Copiar(&aux, incidencias+j);
-          i++;
-          j--;
-        }
+		      }
+		      else
+		      {
+		        if(incidencias[j].Prioridad <= pivote && incidencias[i].Prioridad > pivote) 
+		        { 
+		          Copiar(incidencias+i, &aux);
+		          Copiar(incidencias+j, incidencias+i);
+		          Copiar(&aux, incidencias+j);
+		          i++;
+		          j--;
+		        }
 		  }
     }
 			
@@ -298,8 +300,9 @@ void QuickSort (tIncidencia *incidencias, unsigned izda, unsigned dcha, tBoolean
   if(izda < dcha)
   {
   	pivote = Partir(incidencias, izda, dcha, PorNumero);
-    if(dcha != 0)
-  	QuickSort (incidencias, izda, pivote-1, PorNumero);
+    //if(dcha != 0)
+    if(pivote > 0)
+  		QuickSort (incidencias, izda, pivote-1, PorNumero);
     QuickSort (incidencias, pivote+1, dcha, PorNumero);
   }
 }
@@ -335,7 +338,7 @@ tBoolean BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsign
 {
    tBoolean encontrado = FALSE;
    unsigned mitad= ( inicio +Cantidad )/ 2;
- 
+   
    if(incidencias[mitad].NumIncidencia==Incidencia )
    {
     *posicion = mitad;
@@ -370,12 +373,79 @@ tBoolean BuscarIncidencia (unsigned Incidencia, tIncidencia *incidencias, unsign
 
 void GuardarIncidencias (tIncidencia *incidencias, unsigned N)
 {
-  /* A RELLENAR POR EL ALUMNO */
+    if(incidencias == NULL || N == 0)
+  {
+  	printf("\nNo hay incidencias...\n");
+  	return;
+  }
+  
+  FILE *fout = fopen(NOM_FICHERO, "wb");
+  if(!fout)
+	{
+		printf("\nError de fichero.\n");
+		return;
+	}
+		
+	unsigned posicion = 0;
+	while(posicion < N)
+	{
+	
+		fwrite(incidencias+posicion, sizeof(tIncidencia), 1, fout);
+		posicion++;
+	}
+
+	
+	//fwrite(incidencias, sizeof(tIncidencia), N, fout);
+	fclose(fout);
 }
 
-void LeerIncidencias (tIncidencia *incidencias, unsigned N)
+tIncidencia *LeerIncidencias (tIncidencia *incidencias, unsigned *N)
 {
-  /* A RELLENAR POR EL ALUMNO */
+	  FILE *fin = fopen(NOM_FICHERO, "rb");
+	  if(!fin)
+		{
+			printf("\nError de fichero.\n");
+			return 0;
+		}
+	
+	unsigned posicion = 0;
+	unsigned indice =*N;
+	tBoolean existe = FALSE;
+	tIncidencia aux;
+
+
+	while(fread(&aux, sizeof(tIncidencia), 1, fin) > 0)
+	{
+		existe = FALSE;
+		if(indice > 2)
+			existe = BuscarIncidencia(aux.NumIncidencia, incidencias, 0, indice-1, &posicion);
+		
+		if(existe == FALSE)
+		{
+		/*	printf("\nValor de N: %u", indice);
+			MostrarIncidencia(&aux);*/
+			incidencias = (tIncidencia *)realloc(incidencias, (indice+1)*sizeof(tIncidencia));
+			Copiar(&aux, incidencias+indice);
+			
+			printf("\nIncidencia agregada:\n");
+			MostrarIncidencia(incidencias+indice);
+			
+			indice++;
+		}
+		else
+		{
+			printf("\nEl numero de esta incidencia ya se encuentra en la lista. Incidencia no agregada.\n");
+			MostrarIncidencia(&aux);
+		}
+
+		
+	}
+	
+	*N = indice;
+	fclose(fin);
+
+	//printf("N = %u", *N);
+	return incidencias;
 }
 
 void OrdenarIncidencias (tIncidencia *incidencias, unsigned N) //ORDENAR POR PRIORIDAD
@@ -398,7 +468,26 @@ void OrdenarIncidencias (tIncidencia *incidencias, unsigned N) //ORDENAR POR PRI
 
 void ModificarIncidencia (unsigned Incidencia, tIncidencia *p, unsigned Cantidad)
 {
-  /* A RELLENAR POR EL ALUMNO */
+	unsigned Indice = 0;
+	unsigned opcion = 0;
+	if(BuscarIncidencia(Incidencia, p, 0, Cantidad-1, &Indice) != FALSE)
+	{
+	
+		printf("\n Datos de la incidencia a modificar:\n");
+		MostrarIncidencia(p+Indice);
+		printf("Estado: %u\n", p[Indice].Estado);
+		
+		printf("\nIntroduzca los nuevos datos de la incidencia:\n");
+		PedirDatos(p+Indice);
+		printf("\nIncidencia modificada: \n");
+		MostrarIncidencia(p+Indice);
+		printf("Estado: %u\n", p[Indice].Estado);
+	}
+	else
+	{
+		printf("\nNo se ha encotrado la incidencia.\n");
+	}
+	
 }
 
 void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
@@ -409,11 +498,10 @@ void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
       return;
     }
 
-      printf("\n\nLa incidencia requerida es:\n");
 
-      printf("Numero de incidencia: %d\n", incidencia->NumIncidencia);
+      printf("\n\nNumero de incidencia: %u\n", incidencia->NumIncidencia);
 
-      printf("Prioridad: %d\n", incidencia->Prioridad );
+      printf("Prioridad: %u\n", incidencia->Prioridad );
     
       printf("Asunto: %s\n", incidencia->Asunto);
       
@@ -425,9 +513,6 @@ void MostrarIncidencia (tIncidencia *incidencia) //Autoria: Beatriz
 
       printf("Descripcion:%s\n", incidencia->Descripcion);
 
-      printf("Estado: %d\n", incidencia->Estado);
-
-
 }
 
 
@@ -435,26 +520,14 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 {
 
   char variableAuxiliar[1500];
-
-  printf("Buenos dias, usuario\n");
-
         time_t tiempo = time(0);
         struct tm *tlocal = localtime(&tiempo);
         strftime(incidencia->Fecha,11,"%d/%m/%y",tlocal);
         
-	do
-	{
- 		printf("Introduce numero de la incidencia a guardar\n");
-		fflush(stdin);
-  		scanf("%u", &incidencia->NumIncidencia);
-  		while(getchar()!= '\n');
-  		if(incidencia->NumIncidencia <= 0){
-  			printf("\n El numero de incidencia debe ser mayor de 0.\n");
-		    }
-  	}while(incidencia->NumIncidencia <= 0);
+
 
 	do{
-		printf("Introduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
+		printf("\nIntroduce la prioridad, siendo 1 la mayor prioridad y 4 la menor\n");
 	    fflush(stdin);
         scanf("%u", &incidencia->Prioridad);
         while(getchar()!='\n');
@@ -467,7 +540,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 
   
     do{
-           printf("Introduce el asunto\n");
+           printf("\nIntroduce el asunto\n");
            fflush(stdin);
            fgets(variableAuxiliar, 1500, stdin);
            variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
@@ -481,7 +554,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     strcpy(incidencia->Asunto, variableAuxiliar);
 
     do{
-           printf("Introduce el sistema\n");
+           printf("\nIntroduce el sistema\n");
            fflush(stdin);
             fgets(variableAuxiliar, 1500, stdin);
            variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
@@ -498,7 +571,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     strcpy(incidencia->Sistema, variableAuxiliar);
 
     do{
-        printf("Introduce el Subsistema\n");
+        printf("\nIntroduce el Subsistema\n");
         fflush(stdin);
          fgets(variableAuxiliar, 1500, stdin);
            variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
@@ -515,12 +588,12 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
     while(strlen(variableAuxiliar)>9 || variableAuxiliar[0]=='\0');
     strcpy(incidencia->Subsistema, variableAuxiliar);
     
-    printf("La fecha actual es: \n");
+    printf("\nLa fecha actual es: \n");
     printf("%s\n",incidencia->Fecha);
 
     do{
 
-      printf("Introduce la Descripcion\n");
+      printf("\nIntroduce la Descripcion\n");
       fflush(stdin);
        fgets(variableAuxiliar, 1500, stdin);
            variableAuxiliar[strlen(variableAuxiliar) - 1] = 0;
@@ -541,7 +614,7 @@ void PedirDatos (tIncidencia *incidencia) //AUTORIA: BEATRIZ
 
 do{
   incidencia->Estado=-1;
-  printf("Introduce el estado\n");
+  printf("\nIntroduce el estado\n");
   fflush(stdin);
   scanf("%u", &incidencia->Estado);
   while(getchar()!='\n');
@@ -549,7 +622,6 @@ do{
       {
         printf("No es posible. El estado puede ser: 0, 1 o 2\n");
       }
-
 }while(incidencia->Estado >2);
 
   
@@ -558,17 +630,40 @@ do{
 
 tIncidencia *AgregarIncidencia( tIncidencia *incidencias , unsigned Cantidad) //AUTORIA: RAUL Y BEA
 {
+	unsigned Indice = 0;
+	tBoolean existe = FALSE;
+	unsigned NumeroIncidencia = 0;
     if(incidencias==NULL)
     {
           incidencias=(tIncidencia*)calloc(1, sizeof(tIncidencia));
     }
     else 
     {
-          incidencias=(tIncidencia*)realloc(incidencias, (int)Cantidad);
+          incidencias=(tIncidencia*)realloc(incidencias, Cantidad*sizeof(tIncidencia));
     }
+    do
+	{
+ 		printf("Introduce numero de la incidencia a guardar\n");
+		fflush(stdin);
+  		scanf("%u", &NumeroIncidencia);
+  		while(getchar()!= '\n');
+  		
+  		if(Cantidad > 2)
+  			existe = BuscarIncidencia(NumeroIncidencia, incidencias, 0, Cantidad-1, &Indice);
+  		if(NumeroIncidencia <= 0)
+  			printf("\n El numero de incidencia debe ser mayor de 0.\n");
+		else if(existe != FALSE)
+			printf("\n Ese numero de incidencia ya existe.\n");
+			
+  	}while(NumeroIncidencia <= 0 || existe != FALSE);
+  	
     PedirDatos(&incidencias[Cantidad-1]);
+    
+    incidencias[Cantidad-1].NumIncidencia = NumeroIncidencia;
     printf("Incidencia agregada:\n");
     MostrarIncidencia(&incidencias[Cantidad-1]);
+    printf("Estado: %u\n", incidencias[Cantidad-1].Estado);
+    
     QuickSort(incidencias, 0, Cantidad-1, TRUE);
 
     return incidencias;
@@ -593,13 +688,11 @@ void TodasIncidencias(tIncidencia *incidencias, unsigned Cantidad)
 }
 int main ()
 {
-    tIncidencia *pIncidencias;   
+    tIncidencia *pIncidencias = NULL;   
     unsigned Cantidad=0;
-    unsigned Opcion;
-    unsigned Incidencia;
-    unsigned Indice;
-
-    pIncidencias=NULL;
+    unsigned Opcion = 0;
+    unsigned Incidencia = 0;
+    unsigned Indice = 0;
 
     do
    {
@@ -620,36 +713,31 @@ int main ()
                 if(BuscarIncidencia(Incidencia, pIncidencias, 0, Cantidad-1, &Indice)!=FALSE)
                  { 
                   printf("\nLa incidencia se ha encontrado con exito. La incidencia es:\n");
-                  printf("\n\nNumero de incidencia: %u", pIncidencias[Indice].NumIncidencia);
-                  printf("\n\nPrioridad: %u", pIncidencias[Indice].Prioridad);
-                  printf("\n\nAsunto: %s", pIncidencias[Indice].Asunto);
-                  printf("\n\nSistema: %s", pIncidencias[Indice].Sistema);
-                  printf("\n\nSubsistema:  %s", pIncidencias[Indice].Subsistema);
-                  printf("\n\nDescripcion: %s", pIncidencias[Indice].Descripcion);
-                  }
+                  MostrarIncidencia(pIncidencias+Indice);
+               }
                 else
                 {
                   printf("Lo sentimos, incidencia no encontrada.\n");
                 }
-                //system("PAUSE");
+                
                 break;
         case 3: 
-          
-               printf("Numero de incidencia a modificar\n");
-               scanf("%d",&Incidencia);
-               //ModificarIncidencia (Incidencia, pIncidencias, Cantidad);
-               
+        	    printf("Numero de incidencia a modificar\n");
+	            scanf("%d",&Incidencia);
+          	   
+                ModificarIncidencia (Incidencia, pIncidencias, Cantidad);
+           	
                break;
 
         case 4:
                 printf("Guardar incidencias\n");
-                //GuardarIncidencias(pIncidencias, Cantidad);
+                 GuardarIncidencias(pIncidencias, Cantidad);
                 
                 break;
 
         case 5:
                 printf("Leer incidencias\n");
-                //LeerIncidencias (pIncidencias, Cantidad);
+                pIncidencias = LeerIncidencias (pIncidencias, &Cantidad);
                 
                 break;
         
