@@ -4,14 +4,14 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = Plantilla_TrabajoEnGrupo_V2.o
-LINKOBJ  = Plantilla_TrabajoEnGrupo_V2.o
-LIBS     = -L"D:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"D:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
-INCS     = -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
-CXXINCS  = -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"D:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+OBJ      = Incidencias.o Plantilla_TrabajoEnGrupo_V2.o Ordenacion.o Ficheros.o
+LINKOBJ  = Incidencias.o Plantilla_TrabajoEnGrupo_V2.o Ordenacion.o Ficheros.o
+LIBS     = -L"E:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"E:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
+INCS     = -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"E:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
 BIN      = Practica_grupal.exe
-CXXFLAGS = $(CXXINCS) -g3 -Wall
-CFLAGS   = $(INCS) -g3 -Wall
+CXXFLAGS = $(CXXINCS) -g3
+CFLAGS   = $(INCS) -g3
 RM       = rm.exe -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -24,5 +24,14 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
+Incidencias.o: Incidencias.c
+	$(CC) -c Incidencias.c -o Incidencias.o $(CFLAGS)
+
 Plantilla_TrabajoEnGrupo_V2.o: Plantilla_TrabajoEnGrupo_V2.c
 	$(CC) -c Plantilla_TrabajoEnGrupo_V2.c -o Plantilla_TrabajoEnGrupo_V2.o $(CFLAGS)
+
+Ordenacion.o: Ordenacion.c
+	$(CC) -c Ordenacion.c -o Ordenacion.o $(CFLAGS)
+
+Ficheros.o: Ficheros.c
+	$(CC) -c Ficheros.c -o Ficheros.o $(CFLAGS)
