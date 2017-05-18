@@ -260,9 +260,9 @@ tIncidencia *AgregarIncidencia( tIncidencia *incidencias , unsigned Cantidad) { 
 
 	incidencias[Cantidad-1].NumIncidencia = NumeroIncidencia;
 
-	printf("Incidencia agregada:\n");
+	printf("\nIncidencia agregada:");
 	MostrarIncidencia(&incidencias[Cantidad-1]);
-	printf("Estado: %u\n", incidencias[Cantidad-1].Estado);
+	printf("\n\tEstado: %u\n", incidencias[Cantidad-1].Estado);
 
 	//Ordenamos las incidencias por numero de incidencias
 	QuickSort(incidencias, 0, Cantidad-1, TRUE);

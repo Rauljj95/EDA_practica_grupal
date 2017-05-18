@@ -80,6 +80,7 @@ int main () {
 			case 2:
 				printf("Numero de incidencia a buscar\n");
 				scanf("%d",&Incidencia);
+				
 				if(BuscarIncidencia(Incidencia, pIncidencias, 0, Cantidad-1, &Indice)!=FALSE) {
 					printf("\nLa incidencia se ha encontrado con exito.\n");
 					MostrarIncidencia(pIncidencias+Indice);
@@ -124,6 +125,7 @@ int main () {
 				
 		}
 		while(getchar()!= '\n');
+		getchar();
 		system("clear");
 		
 	} while (Opcion!= 8);
